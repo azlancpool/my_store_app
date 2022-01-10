@@ -1,3 +1,16 @@
-<button nz-button nzType="primary" nzShape="round">
+<button nz-button nzType="primary" nzShape="round" (click)="newProduct()">
     <i nz-icon nzType="plus"></i>New Product
 </button>
+
+<nz-modal [(nzVisible)]="newProductModalIsVisible" nzTitle="New product information" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7">Name</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <input nz-input formControlName="name" />
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-container>
+</nz-modal>
