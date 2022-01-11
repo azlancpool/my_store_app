@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IProduct } from './models/product.model';
+import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-welcome',
@@ -12,10 +13,12 @@ export class WelcomeComponent implements OnInit {
   validateForm: FormGroup;
 
   constructor(
+    private productService: ProductService,
     private fb: FormBuilder,
   ) {
     this.validateForm = this.fb.group({
       name: ["", [Validators.required]],
+      initialAmount: ["", [Validators.required]],
     });
   }
 
@@ -23,17 +26,25 @@ export class WelcomeComponent implements OnInit {
   }
 
   newProduct() {
-    console.log("new product pressed")
     this.newProductModalIsVisible = true;
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
+    this.productService.newProduct(this.validateForm.value).subscribe({
+      next: this.handleOnNewProductSuccess.bind(this),
+      error: this.handleOnNewProductError.bind(this)
+    });
     this.newProductModalIsVisible = false;
   }
 
+  handleOnNewProductSuccess(): void {
+    console.log("PRODUCT SAVED")
+  }
+  handleOnNewProductError(): void {
+    console.log("ERROR TRYING TO SAVE A PRODUCT")
+  }
+
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.newProductModalIsVisible = false;
   }
 
